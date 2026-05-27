@@ -46,3 +46,28 @@ out/
 _site/
 *.css
 !petclinic.css
+
+# Terraform working directory
+terraform/.terraform/
+
+# Terraform state files
+terraform/*.tfstate
+terraform/*.tfstate.*
+
+# Crash logs
+terraform/crash.log
+
+# Sensitive variable files
+terraform/*.tfvars
+terraform/*.tfvars.json
+
+# Override files
+terraform/override.tf
+terraform/override.tf.json
+terraform/*_override.tf
+terraform/*_override.tf.json
+
+# Terraform lock file
+# Keep this if using provider version pinning
+# Remove the ! line if you want to ignore it
+!terraform/.terraform.lock.hcl
