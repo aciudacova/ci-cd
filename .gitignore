@@ -47,6 +47,14 @@ _site/
 *.css
 !petclinic.css
 
+# Terraform working directories
+**/.terraform/*
+.terraform/
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
 # Terraform working directory
 terraform/.terraform/
 
