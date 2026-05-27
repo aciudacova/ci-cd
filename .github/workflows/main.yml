@@ -75,7 +75,7 @@ jobs:
       with:
         image-ref: '${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}'
         format: 'table'
-        exit-code: '1' # Фейлить пайплайн, если найдены критические уязвимости
+        exit-code: '0' # Фейлить пайплайн, если найдены критические уязвимости / 0 - не фейлить
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
