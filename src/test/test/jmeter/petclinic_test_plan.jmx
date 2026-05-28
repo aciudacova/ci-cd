@@ -19,8 +19,8 @@
             <stringProp name="Argument.value">8080</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
-          <elementProp name="CONTEXT_WEB" elementType="Argument">
-            <stringProp name="Argument.name">CONTEXT_WEB</stringProp>
+          <elementProp name="CONTEXT__WEB" elementType="Argument">
+            <stringProp name="Argument.name">CONTEXT__WEB</stringProp>
             <stringProp name="Argument.value"></stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
@@ -110,7 +110,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -133,7 +133,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/resources/css/petclinic.css</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/resources/css/petclinic.css</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -156,7 +156,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/webjars/bootstrap/dist/js/bootstrap.bundle.min.js</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/webjars/bootstrap/dist/js/bootstrap.bundle.min.js</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -179,7 +179,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/vets.html</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/vets.html</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -202,7 +202,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/find</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/find</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -225,7 +225,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners?lastName=</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners?lastName=</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -248,7 +248,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -271,7 +271,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}/edit</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}/edit</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -330,7 +330,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}/edit</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}/edit</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -353,7 +353,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}/pets/new</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}/pets/new</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -398,7 +398,7 @@
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}/pets/new</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}/pets/new</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -419,7 +419,7 @@
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}/pets/${petCount}/visits/new</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}/pets/${petCount}/visits/new</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -456,7 +456,7 @@
           <stringProp name="HTTPSampler.port"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">${CONTEXT_WEB}/owners/${count}/pets/${petCount}/visits/new</stringProp>
+          <stringProp name="HTTPSampler.path">${CONTEXT__WEB}/owners/${count}/pets/${petCount}/visits/new</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
