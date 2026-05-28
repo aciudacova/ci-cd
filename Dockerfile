@@ -15,5 +15,5 @@ COPY src/ ./src
 RUN ./mvnw package -Dmaven.test.skip.test
 FROM eclipse-temurin:17-jre-jammy AS final
 COPY --from=base /app/target/spring-petclinic-*.jar /spring-petclinic.jar
-EXPOSE 9966
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/spring-petclinic.jar"]
