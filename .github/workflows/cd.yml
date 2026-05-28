@@ -4,9 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       image_tag:
-        description: 'Git Commit Hash (Image Tag) to deploy'
+        description: 'Git Commit Hash (Image Tag) to deploy.'
         required: true
-        default: 'latest' # leave as is or set to specific tag
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -17,9 +16,20 @@ env:
 
 jobs:
   deploy:
-    name: Deploy to ECS
+    name: Deploy & Update GitOps Repo
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -31,17 +41,11 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Download current ECS task definition
-        run: |
-          aws ecs describe-task-definition \
-            --task-definition petclinic-task \
-            --query taskDefinition > task-def.json
-
       - name: Render new image ID into task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-def.json
+          task-definition: config/task-def.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.image_tag }}
 
@@ -52,3 +56,23 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
+
+      - name: Commit and Merge updated Task Definition to Main
+        env:
+          NEW_TAG: ${{ github.event.inputs.image_tag }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          BRANCH_NAME="release-${NEW_TAG:0:7}"
+          git checkout -b "$BRANCH_NAME"
+          cp ${{ steps.task-def.outputs.task-definition }} config/task-def.json
+
+          git add config/task-def.json
+          git commit -m "gitops: update ecs task definition image tag to ${NEW_TAG:0:7} [skip ci]"
+
+          git push origin "$BRANCH_NAME" --force
+
+          gh pr create --title "GitOps: Sync Task Definition to ${NEW_TAG:0:7}" --body "Automated PR to sync infrastructure state after successful ECS deployment." --base main --head "$BRANCH_NAME"
+          gh pr merge --merge --delete-branch
