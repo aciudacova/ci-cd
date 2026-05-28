@@ -161,6 +161,7 @@ resource "aws_security_group" "ecs_sg" {
 # 3. Application Load Balancer
 # ==========================================
 
+# traffic receiver
 resource "aws_lb" "main" {
   name               = "petclinic-alb"
   internal           = false
@@ -169,6 +170,7 @@ resource "aws_lb" "main" {
   subnets            = [aws_subnet.public_1.id, aws_subnet.public_2.id]
 }
 
+# a target group to tell the listener exactly where to send the traffic and to monitor if those destinations are healthy.
 resource "aws_lb_target_group" "app" {
   name        = "petclinic-tg"
   port        = 8080
@@ -187,6 +189,7 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
+# how the load balancer handles incoming connections
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.main.arn
   port              = "80"
@@ -211,6 +214,7 @@ resource "aws_ecr_repository" "petclinic_repo" {
   }
 }
 
+# logical boundary or namespace for container infrastructure
 resource "aws_ecs_cluster" "petclinic_cluster" {
   name = "petclinic-cluster"
 }
@@ -236,6 +240,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# instruction manual for application (static blueprint that describes how to run the application, what resources it needs)
 resource "aws_ecs_task_definition" "petclinic_task" {
   family                   = "petclinic-task"
   network_mode             = "awsvpc"
@@ -246,13 +251,17 @@ resource "aws_ecs_task_definition" "petclinic_task" {
 
   container_definitions = jsonencode([{
     name      = "petclinic-container"
-    image     = "${aws_ecr_repository.petclinic_repo.repository_url}:latest"
+    image     = "${aws_ecr_repository.petclinic_repo.repository_url}" // ignore with lifecycle 
     essential = true
     portMappings = [{
       containerPort = 8080
       hostPort      = 8080
     }]
   }])
+
+  lifecycle {
+    ignore_changes = [container_definitions]
+  }
 }
 
 # ==========================================
@@ -269,7 +278,7 @@ resource "aws_ecs_service" "petclinic_service" {
   network_configuration {
     subnets          = [aws_subnet.private_1.id, aws_subnet.private_2.id]
     security_groups  = [aws_security_group.ecs_sg.id]
-    assign_public_ip = false # Запускаем безопасно в приватной сети без публичного IP
+    assign_public_ip = false
   }
 
   load_balancer {
@@ -287,5 +296,5 @@ resource "aws_ecs_service" "petclinic_service" {
 
 output "alb_dns_name" {
   value       = aws_lb.main.dns_name
-  description = "Публичный URL-адрес вашего веб-приложения в интернете"
+  description = "public DNS name of the Application Load Balancer with which the application can be accessed"
 }
