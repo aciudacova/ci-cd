@@ -1,0 +1,129 @@
+name: CI - Build & Push
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [ 'src/**', 'pom.xml', 'Dockerfile', '.mvn/**', 'mvnw' ]
+  pull_request:
+    branches: [ "main" ]
+    paths: [ 'src/**', 'pom.xml', 'Dockerfile', '.mvn/**', 'mvnw' ]
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: spring-petclinic
+
+jobs:
+  build:
+    name: Build Code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          
+      - name: Compile Application
+        # check if code compiles successfully, without running tests yet
+        run: ./mvnw clean compile
+
+  test:
+    name: Run Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          
+      - name: Run Unit Tests
+        run: ./mvnw test
+
+  docker-build:
+    name: Docker Build
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Docker Image
+        run: docker build -t petclinic:${{ github.sha }} .
+
+      - name: Save Docker Image to Archive
+        # save the built Docker image to a tar file
+        run: docker save petclinic:${{ github.sha }} > petclinic-image.tar
+
+      - name: Upload Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: petclinic-image.tar
+          retention-days: 1
+
+  docker-scan:
+    name: Security Scan
+    needs: docker-build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Download Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker Image
+        # load the Docker image from the tar file into the local Docker daemon
+        run: docker load < petclinic-image.tar
+
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'petclinic:${{ github.sha }}'
+          format: 'table'
+          exit-code: '0' 
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
+  docker-push:
+    name: Push to ECR
+    needs: docker-scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Download Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Load Docker Image
+        run: docker load < petclinic-image.tar
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Tag and Push Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker tag petclinic:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker tag petclinic:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+          
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
