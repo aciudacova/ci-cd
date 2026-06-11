@@ -2,7 +2,7 @@
   "containerDefinitions": [
     {
       "name": "petclinic-container",
-      "image": "721212970627.dkr.ecr.us-east-1.amazonaws.com/spring-petclinic:latest",
+      "image": "721212970627.dkr.ecr.us-east-1.amazonaws.com/spring-petclinic:aabbf36d82b6b33f796242380972ce71c25195cb",
       "cpu": 0,
       "portMappings": [
         {
